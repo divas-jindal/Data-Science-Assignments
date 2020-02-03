@@ -97,6 +97,20 @@ def cont(x,y,th):
             jv[i][j]=cost_function(x,y,th_copy)
     plt.contour(TH1,TH2,jv)
     plt.savefig('contour_plots(with_regularization).png')
+
+def rcont(x,y,th,lambd):
+    th1=np.linspace(-1000,1000,num=1000)
+    th2=np.linspace(-1000,1000,num=1000)
+    TH1,TH2=np.meshgrid(th1,th2)
+    th_copy=th.copy()
+    jv=np.zeros((len(th1),len(th2)))
+    for i in range(0,len(th1)):
+        th_copy[1][0]=th1[i]
+        for j in range(0,len(th2)):
+            th_copy[2][0]=th2[j]
+            jv[i][j]=rcost_function(x,y,th_copy,lamd)
+    plt.contour(TH1,TH2,jv)
+    plt.savefig('contour_plots(with_regularization).png')
     
 #load datas
 #get x and y matrix
@@ -145,7 +159,7 @@ y_test=y[test_start:test_end]
 
 alpha=0.0001
 numIter=2000
-lamda=1000000000
+lamd=10000
 
 # print(x_train.shape,y_train.shape)
 # print(x_test.shape,y_test.shape)
@@ -154,7 +168,7 @@ lamda=1000000000
 
 iterator=[i for i in range(0,numIter)]
 # Uncomment to run with applying regulaization
-theta,cost=rgradient_descent(x_train,y_train,alpha,numIter,lamda)
+theta,cost=rgradient_descent(x_train,y_train,alpha,numIter,lamd)
 
 #theta,cost=gradient_descent(x_train,y_train,alpha,numIter)
 
@@ -174,7 +188,7 @@ y_pred=predict_value(x_test,theta)
 print("prediction shape")
 print(y_pred.shape)
 
-cont(x_test,y_test,theta)
+rcont(x_test,y_test,theta,lamd)
 print("hi!")
 
 
